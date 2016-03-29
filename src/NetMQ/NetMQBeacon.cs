@@ -2,7 +2,7 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
-using JetBrains.Annotations;
+
 using NetMQ.Sockets;
 
 namespace NetMQ
@@ -16,7 +16,7 @@ namespace NetMQ
         /// Create a new NetMQBeaconEventArgs object containing the given NetMQBeacon.
         /// </summary>
         /// <param name="beacon">the NetMQBeacon object to hold a reference to</param>
-        public NetMQBeaconEventArgs([NotNull] NetMQBeacon beacon)
+        public NetMQBeaconEventArgs( NetMQBeacon beacon)
         {
             Beacon = beacon;
         }
@@ -24,7 +24,7 @@ namespace NetMQ
         /// <summary>
         /// Get the NetMQBeacon object that this holds.
         /// </summary>
-        [NotNull]
+        
         public NetMQBeacon Beacon { get; private set; }
     }
 
@@ -57,7 +57,7 @@ namespace NetMQ
             private NetMQTimer m_pingTimer;
             private NetMQPoller m_poller;
 
-            private void Configure([NotNull] string interfaceName, int port)
+            private void Configure( string interfaceName, int port)
             {
                 // In case the beacon was configured twice
                 if (m_udpSocket != null)
@@ -119,7 +119,7 @@ namespace NetMQ
                 m_pipe.SendFrame(bindTo == null ? "" : bindTo.ToString());
             }
 
-            private static bool Compare([NotNull] NetMQFrame a, [NotNull] NetMQFrame b, int size)
+            private static bool Compare( NetMQFrame a,  NetMQFrame b, int size)
             {
                 for (int i = 0; i < size; i++)
                 {
@@ -247,8 +247,8 @@ namespace NetMQ
 
         private readonly EventDelegator<NetMQBeaconEventArgs> m_receiveEvent;
 
-        [CanBeNull] private string m_boundTo;
-        [CanBeNull] private string m_hostName;
+         private string m_boundTo;
+         private string m_hostName;
 
         /// <summary>
         /// Create a new NetMQBeacon.
@@ -278,7 +278,7 @@ namespace NetMQ
         ///     <item>an error occurred during reverse DNS lookup.</item>
         /// </list>
         /// </remarks>
-        [CanBeNull]
+        
         public string HostName
         {
             get
@@ -344,7 +344,7 @@ namespace NetMQ
         /// <remarks>Blocks until the bind operation completes.</remarks>
         /// <param name="port">The UDP port to bind to.</param>
         /// <param name="interfaceName">IP address of the interface to bind to. Pass empty string (the default value) to use the default interface.</param>
-        public void Configure(int port, [NotNull] string interfaceName = "")
+        public void Configure(int port,  string interfaceName = "")
         {
             var message = new NetMQMessage();
             message.Append(ConfigureCommand);
@@ -363,7 +363,7 @@ namespace NetMQ
         /// <param name="transmit">Beacon to transmit.</param>
         /// <param name="interval">Interval to transmit beacon</param>
         /// <param name="encoding">Encoding for <paramref name="transmit"/>. Defaults to <see cref="Encoding.UTF8"/>.</param>
-        public void Publish([NotNull] string transmit, TimeSpan interval, Encoding encoding = null)
+        public void Publish( string transmit, TimeSpan interval, Encoding encoding = null)
         {
             Publish((encoding ?? Encoding.UTF8).GetBytes(transmit), interval);
         }
@@ -373,7 +373,7 @@ namespace NetMQ
         /// </summary>
         /// <param name="transmit">Beacon to transmit</param>
         /// <param name="interval">Interval to transmit beacon</param>
-        public void Publish([NotNull] byte[] transmit, TimeSpan interval)
+        public void Publish( byte[] transmit, TimeSpan interval)
         {
             var message = new NetMQMessage();
             message.Append(PublishCommand);
@@ -388,7 +388,7 @@ namespace NetMQ
         /// </summary>
         /// <param name="transmit">Beacon to transmit</param>
         /// <param name="encoding">Encoding for <paramref name="transmit"/>. Defaults to <see cref="Encoding.UTF8"/>.</param>
-        public void Publish([NotNull] string transmit, Encoding encoding = null)
+        public void Publish( string transmit, Encoding encoding = null)
         {
             Publish(transmit, TimeSpan.FromSeconds(1), encoding);
         }
@@ -397,7 +397,7 @@ namespace NetMQ
         /// Publish beacon immediately and continue to publish every second
         /// </summary>
         /// <param name="transmit">Beacon to transmit</param>
-        public void Publish([NotNull] byte[] transmit)
+        public void Publish( byte[] transmit)
         {
             Publish(transmit, TimeSpan.FromSeconds(1));
         }
@@ -418,7 +418,7 @@ namespace NetMQ
         /// Any previous subscription is replaced by this one.
         /// </remarks>
         /// <param name="filter">Beacon will be filtered by this</param>
-        public void Subscribe([NotNull] string filter)
+        public void Subscribe( string filter)
         {
             m_actor.SendMoreFrame(SubscribeCommand).SendFrame(filter);
         }

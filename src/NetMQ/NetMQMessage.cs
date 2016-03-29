@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using JetBrains.Annotations;
+
 
 namespace NetMQ
 {
@@ -46,7 +46,7 @@ namespace NetMQ
         /// </summary>
         /// <param name="frames">a collection of NetMQFrames, to form the frame-stack</param>
         /// <exception cref="ArgumentNullException">The value of 'frames' cannot be null. </exception>
-        public NetMQMessage([NotNull] IEnumerable<NetMQFrame> frames)
+        public NetMQMessage( IEnumerable<NetMQFrame> frames)
         {
             if (frames == null)
                 throw new ArgumentNullException("frames");
@@ -59,7 +59,7 @@ namespace NetMQ
         /// </summary>
         /// <param name="buffers">a collection of byte-array buffers, to form the frame-stack</param>
         /// <exception cref="ArgumentNullException">The value of 'buffers' cannot be null. </exception>
-        public NetMQMessage([NotNull] IEnumerable<byte[]> buffers)
+        public NetMQMessage( IEnumerable<byte[]> buffers)
         {
             if (buffers == null)
                 throw new ArgumentNullException("buffers");
@@ -74,7 +74,7 @@ namespace NetMQ
         /// <summary>
         /// Gets the first frame in the current message.
         /// </summary>
-        [NotNull]
+        
         public NetMQFrame First
         {
             get { return m_frames[0]; }
@@ -83,7 +83,7 @@ namespace NetMQ
         /// <summary>
         /// Gets the last frame in the current message.
         /// </summary>
-        [NotNull]
+        
         public NetMQFrame Last
         {
             get { return m_frames[m_frames.Count - 1]; }
@@ -113,7 +113,7 @@ namespace NetMQ
         /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="index"/>is less than 0 -or- <paramref name="index"/> is equal to or greater than <see cref="FrameCount"/>.
         /// </exception>
-        [NotNull]
+        
         public NetMQFrame this[int index]
         {
             get { return m_frames[index]; }
@@ -127,7 +127,7 @@ namespace NetMQ
         /// Add the given NetMQFrame to this NetMQMessage, at the highest-indexed position of the frame-stack.
         /// </summary>
         /// <param name="frame">a NetMQFrame object comprising the frame to be appended onto the frame-stack</param>
-        public void Append([NotNull] NetMQFrame frame)
+        public void Append( NetMQFrame frame)
         {
             m_frames.Add(frame);
         }
@@ -137,7 +137,7 @@ namespace NetMQ
         /// Data is not copied.
         /// </summary>
         /// <param name="buffer">a byte-array containing the message to append onto the frame-stack of this NetMQMessage</param>
-        public void Append([NotNull] byte[] buffer)
+        public void Append( byte[] buffer)
         {
             m_frames.Add(new NetMQFrame(buffer));
         }
@@ -147,7 +147,7 @@ namespace NetMQ
         /// the highest-indexed position of the frame-stack of this NetMQMessage.
         /// </summary>
         /// <param name="message">a string containing the message to append onto the frame-stack of this NetMQMessage</param>
-        public void Append([NotNull] string message)
+        public void Append( string message)
         {
             m_frames.Add(new NetMQFrame(message));
         }
@@ -158,7 +158,7 @@ namespace NetMQ
         /// </summary>
         /// <param name="message">a string containing the message to append onto the frame-stack of this NetMQMessage</param>
         /// <param name="encoding">an Encoding that specifies how to convert the string into bytes</param>
-        public void Append([NotNull] string message, [NotNull] Encoding encoding)
+        public void Append( string message,  Encoding encoding)
         {
             m_frames.Add(new NetMQFrame(message, encoding));
         }
@@ -202,7 +202,7 @@ namespace NetMQ
         /// This inserts the given NetMQFrame into the lowest-indexed position of this NetMQMessage,
         /// pushing all of the other frames upward in index-position.
         /// </remarks>
-        public void Push([NotNull] NetMQFrame frame)
+        public void Push( NetMQFrame frame)
         {
             m_frames.Insert(0, frame);
         }
@@ -217,7 +217,7 @@ namespace NetMQ
         /// the collection of frames of this NetMQMessage,
         /// pushing all of the other frames upward in index-position.
         /// </remarks>
-        public void Push([NotNull] byte[] buffer)
+        public void Push( byte[] buffer)
         {
             m_frames.Insert(0, new NetMQFrame(buffer));
         }
@@ -232,7 +232,7 @@ namespace NetMQ
         /// the collection of frames of this NetMQMessage,
         /// pushing all of the other frames upward in index-position.
         /// </remarks>
-        public void Push([NotNull] string message)
+        public void Push( string message)
         {
             m_frames.Insert(0, new NetMQFrame(message));
         }
@@ -248,7 +248,7 @@ namespace NetMQ
         /// the collection of frames of this NetMQMessage,
         /// pushing all of the other frames upward in index-position.
         /// </remarks>
-        public void Push([NotNull] string message, [NotNull] Encoding encoding)
+        public void Push( string message,  Encoding encoding)
         {
             m_frames.Insert(0, new NetMQFrame(message, encoding));
         }
@@ -297,7 +297,7 @@ namespace NetMQ
         /// Remove and return the first frame.
         /// </summary>
         /// <returns>the first frame, which was popped - which is the frame from the lowest-indexed position</returns>
-        [NotNull]
+        
         public NetMQFrame Pop()
         {
             NetMQFrame frame = m_frames[0];
@@ -311,7 +311,7 @@ namespace NetMQ
         /// </summary>
         /// <param name="frame">the frame to remove</param>
         /// <returns><c>true</c> if removed, otherwise <c>false</c>.</returns>
-        public bool RemoveFrame([NotNull] NetMQFrame frame)
+        public bool RemoveFrame( NetMQFrame frame)
         {
             return m_frames.Remove(frame);
         }

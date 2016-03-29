@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using JetBrains.Annotations;
+
 using NUnit.Framework;
 
 namespace NetMQ.Tests
@@ -30,7 +30,7 @@ namespace NetMQ.Tests
             return true;
         }
 
-        public void PushFrame([NotNull] byte[] frame)
+        public void PushFrame( byte[] frame)
         {
             m_frames.Enqueue(frame);
         }
@@ -49,8 +49,8 @@ namespace NetMQ.Tests
             m_socket = new MockReceivingSocket();
         }
 
-        [NotNull]
-        private byte[] PushFrame([NotNull] string hello)
+        
+        private byte[] PushFrame( string hello)
         {
             byte[] expected = Encoding.ASCII.GetBytes(hello);
             m_socket.PushFrame(expected);

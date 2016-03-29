@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
 using AsyncIO;
-using JetBrains.Annotations;
+
 
 namespace NetMQ.Core.Transports.Pgm
 {
@@ -42,7 +42,7 @@ namespace NetMQ.Core.Transports.Pgm
         private SessionBase m_session;
         private int m_currentReconnectIvl;
 
-        public PgmSender([NotNull] IOThread ioThread, [NotNull] Options options, [NotNull] Address addr, bool delayedStart)
+        public PgmSender( IOThread ioThread,  Options options,  Address addr, bool delayedStart)
             : base(ioThread)
         {
             m_options = options;
@@ -58,7 +58,7 @@ namespace NetMQ.Core.Transports.Pgm
             m_state = State.Idle;
         }
 
-        public void Init([NotNull] PgmAddress pgmAddress)
+        public void Init( PgmAddress pgmAddress)
         {
             m_pgmAddress = pgmAddress;
 

@@ -24,7 +24,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net.Sockets;
 using AsyncIO;
-using JetBrains.Annotations;
+
 
 namespace NetMQ.Core.Transports
 {
@@ -814,7 +814,7 @@ namespace NetMQ.Core.Transports
             throw NetMQException.Create(socketError);
         }
 
-        private void BeginWrite([NotNull] ByteArraySegment data, int size)
+        private void BeginWrite( ByteArraySegment data, int size)
         {
             try
             {
@@ -853,7 +853,7 @@ namespace NetMQ.Core.Transports
             throw NetMQException.Create(socketError);
         }
 
-        private void BeginRead([NotNull] ByteArraySegment data, int size)
+        private void BeginRead( ByteArraySegment data, int size)
         {
             try
             {

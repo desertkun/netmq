@@ -18,7 +18,6 @@ namespace NetMQ.Sockets
         /// <example><code>var socket = new PairSocket(">tcp://127.0.0.1:5555,@127.0.0.1:55556");</code></example>                 
         public PairSocket(string connectionString = null) : base(ZmqSocketType.Pair, connectionString, DefaultAction.Connect)
         {
-            
         }
 
         /// <summary>
