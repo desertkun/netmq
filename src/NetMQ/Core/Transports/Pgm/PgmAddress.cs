@@ -76,14 +76,14 @@ namespace NetMQ.Core.Transports.Pgm
         
         public IPAddress InterfaceAddress { get; private set; }
 
-        public IPEndPoint Address { get; private set; }
+        public EndPoint Address { get; private set; }
 
         public override string ToString()
         {
             if (Address == null)
                 return string.Empty;
 
-            IPEndPoint endpoint = Address;
+            IPEndPoint endpoint = (IPEndPoint)Address;
 
             return endpoint.AddressFamily == AddressFamily.InterNetworkV6 
                 ? Protocol + "://[" + endpoint.AddressFamily + "]:" + endpoint.Port 

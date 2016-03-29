@@ -171,6 +171,11 @@ namespace NetMQ.Core.Transports.Tcp
             throw new NotImplementedException();
         }
 
+        protected virtual AsyncSocket NewSocket()
+        {
+            return AsyncSocket.Create(m_addr.Resolved.Address.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+        }
+
         /// <summary>
         /// Internal function to start the actual connection establishment.
         /// </summary>
@@ -181,7 +186,7 @@ namespace NetMQ.Core.Transports.Tcp
             // Create the socket.
             try
             {
-                m_s = AsyncSocket.Create(m_addr.Resolved.Address.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+                m_s = NewSocket();
             }
             catch (SocketException)
             {
@@ -195,13 +200,19 @@ namespace NetMQ.Core.Transports.Tcp
             // Connect to the remote peer.
             try
             {
-                m_s.Connect(m_addr.Resolved.Address.Address, m_addr.Resolved.Address.Port);
+                System.Console.WriteLine("Ha - " + m_addr.Resolved.Address.ToString());
+                m_s.Connect(m_addr.Resolved.Address);
                 m_socket.EventConnectDelayed(m_endpoint, ErrorCode.InProgress);
             }
             catch (SocketException ex)
             {
                 OutCompleted(ex.SocketErrorCode, 0);
             }
+        }
+
+        protected virtual void SetNoDelay()
+        {
+            m_s.NoDelay = true;
         }
 
         /// <summary>
@@ -239,7 +250,7 @@ namespace NetMQ.Core.Transports.Tcp
                 m_ioObject.RemoveSocket(m_s);
                 m_handleValid = false;
 
-                m_s.NoDelay = true;
+                SetNoDelay();
 
                 // As long as the TCP keep-alive option is not -1 (indicating no change),
                 if (m_options.TcpKeepalive != -1)

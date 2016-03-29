@@ -37,8 +37,8 @@ namespace NetMQ.Core.Transports.Tcp
         /// <summary>
         /// Address to listen on.
         /// </summary>
-        private readonly TcpAddress m_address;
         
+        private readonly Address.IZAddress m_address;
 
         /// <summary>
         /// Underlying socket.
@@ -77,9 +77,14 @@ namespace NetMQ.Core.Transports.Tcp
             : base(ioThread, options)
         {
             m_ioObject = new IOObject(ioThread);
-            m_address = new TcpAddress();
+            m_address = NewAddress();
             m_handle = null;
             m_socket = socket;
+        }
+
+        protected virtual Address.IZAddress NewAddress()
+        {
+            return new TcpAddress();
         }
 
         /// <summary>
@@ -110,6 +115,11 @@ namespace NetMQ.Core.Transports.Tcp
             base.ProcessTerm(linger);
         }
 
+        protected virtual AsyncSocket NewSocket()
+        {
+            return AsyncSocket.Create(m_address.Address.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+        }
+
         /// <summary>
         /// Set address to listen on.
         /// </summary>
@@ -120,7 +130,7 @@ namespace NetMQ.Core.Transports.Tcp
 
             try
             {
-                m_handle = AsyncSocket.Create(m_address.Address.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+                m_handle = NewSocket();
                 
                 Debug.Assert(m_handle != null);
 
@@ -140,13 +150,21 @@ namespace NetMQ.Core.Transports.Tcp
                 m_handle.Bind(m_address.Address);
                 m_handle.Listen(m_options.Backlog);
 
-                // Copy the port number after binding in case we requested a system-allocated port number (TCP port zero)
-                m_address.Address.Port = m_handle.LocalEndPoint.Port;
+                if (m_address.Address is System.Net.IPEndPoint &&
+                    m_handle.LocalEndPoint is System.Net.IPEndPoint)
+                {
+                    // Copy the port number after binding in case we requested a system-allocated port number (TCP port zero)
+                    ((System.Net.IPEndPoint)m_address.Address).Port = ((System.Net.IPEndPoint)m_handle.LocalEndPoint).Port;
+                }
+
                 m_endpoint = m_address.ToString();
 
                 m_socket.EventListening(m_endpoint, m_handle);
 
-                m_port = m_handle.LocalEndPoint.Port;
+                if (m_handle.LocalEndPoint is System.Net.IPEndPoint)
+                {
+                    m_port = ((System.Net.IPEndPoint)m_handle.LocalEndPoint).Port;
+                }
             }
             catch (SocketException ex)
             {
@@ -157,7 +175,7 @@ namespace NetMQ.Core.Transports.Tcp
 
         private void Accept()
         {
-            m_acceptedSocket = AsyncSocket.Create(m_address.Address.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+            m_acceptedSocket = NewSocket();
 
             // start accepting socket async
             m_handle.Accept(m_acceptedSocket);

@@ -42,7 +42,7 @@ namespace NetMQ.Core.Transports.Tcp
             if (Address == null)
                 return string.Empty;
 
-            var endpoint = Address;
+            IPEndPoint endpoint = (IPEndPoint)Address;
 
             return endpoint.AddressFamily == AddressFamily.InterNetworkV6 
                 ? Protocol + "://[" + endpoint.AddressFamily + "]:" + endpoint.Port 
@@ -121,7 +121,7 @@ namespace NetMQ.Core.Transports.Tcp
         /// Get the Address implementation - which here is an IPEndPoint,
         /// which contains Address, AddressFamily, and Port properties.
         /// </summary>
-        public IPEndPoint Address { get; private set; }
+        public EndPoint Address { get; private set; }
 
         /// <summary>
         /// Get the textual-representation of the communication protocol implied by this TcpAddress,

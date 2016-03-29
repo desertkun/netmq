@@ -19,6 +19,7 @@
 */
 
 using System.Net;
+using Mono.Unix;
 
 namespace NetMQ.Core.Transports.Ipc
 {
@@ -38,16 +39,10 @@ namespace NetMQ.Core.Transports.Ipc
         {
             m_name = name;
 
-            int hash = name.GetHashCode();
-            if (hash < 0)
-                hash = -hash;
-            hash = hash%55536;
-            hash += 10000;
-
-            Address = new IPEndPoint(IPAddress.Loopback, hash);
+            Address = new UnixEndPoint(name);
         }
 
-        public IPEndPoint Address { get; private set; }
+        public EndPoint Address { get; private set; }
 
         public string Protocol
         {
