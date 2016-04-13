@@ -36,8 +36,6 @@ namespace NetMQ.Core.Transports.Ipc
 
         protected override AsyncIO.AsyncSocket NewSocket()
         {
-            System.Console.WriteLine("New unix socket!");
-
             return AsyncSocket.Create(AddressFamily.Unix, SocketType.Stream, ProtocolType.IP);
         }
 

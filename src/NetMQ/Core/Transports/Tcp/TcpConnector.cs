@@ -200,7 +200,6 @@ namespace NetMQ.Core.Transports.Tcp
             // Connect to the remote peer.
             try
             {
-                System.Console.WriteLine("Ha - " + m_addr.Resolved.Address.ToString());
                 m_s.Connect(m_addr.Resolved.Address);
                 m_socket.EventConnectDelayed(m_endpoint, ErrorCode.InProgress);
             }
